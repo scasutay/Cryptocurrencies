@@ -2,7 +2,7 @@ package com.servet.cryptocurrencies.crypto.presentation.models
 
 import androidx.annotation.DrawableRes
 import com.servet.cryptocurrencies.crypto.domain.Currency
-import com.servet.cryptocurrencies.ui.util.getDrawableForCurrencyCode
+import com.servet.cryptocurrencies.core.presentation.util.getDrawableForCurrencyCode
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale

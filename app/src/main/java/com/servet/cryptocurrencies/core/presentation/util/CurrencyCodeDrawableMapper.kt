@@ -1,4 +1,4 @@
-package com.servet.cryptocurrencies.ui.util
+package com.servet.cryptocurrencies.core.presentation.util
 
 import com.servet.cryptocurrencies.R
 
