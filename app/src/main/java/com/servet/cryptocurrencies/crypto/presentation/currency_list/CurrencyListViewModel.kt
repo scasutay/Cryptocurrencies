@@ -6,9 +6,11 @@ import com.servet.cryptocurrencies.core.domain.util.onError
 import com.servet.cryptocurrencies.core.domain.util.onSuccess
 import com.servet.cryptocurrencies.crypto.domain.CryptoDataSource
 import com.servet.cryptocurrencies.crypto.presentation.models.toCurrencyUI
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -26,6 +28,9 @@ class CurrencyListViewModel(
             CurrencyListState()
         )
 
+    private val _events = Channel<CurrencyListEvent>()
+    val events = _events.receiveAsFlow()
+
     fun onAction(action: CurrencyListAction) {
         when (action) {
             is CurrencyListAction.OnCurrencyClick -> {
@@ -33,7 +38,6 @@ class CurrencyListViewModel(
             }
         }
     }
-
 
     private fun loadCurrencies() {
         viewModelScope.launch {
@@ -50,6 +54,7 @@ class CurrencyListViewModel(
                 }
                 .onError { error ->
                     _state.update { it.copy(isLoading = false) }
+                    _events.send(CurrencyListEvent.Error(error))
                 }
         }
     }
