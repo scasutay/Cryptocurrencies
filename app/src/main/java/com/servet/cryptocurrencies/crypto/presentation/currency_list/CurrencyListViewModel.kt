@@ -34,7 +34,11 @@ class CurrencyListViewModel(
     fun onAction(action: CurrencyListAction) {
         when (action) {
             is CurrencyListAction.OnCurrencyClick -> {
-
+                _state.update {
+                    it.copy(
+                        selectedCurrency = action.currencyUI
+                    )
+                }
             }
         }
     }

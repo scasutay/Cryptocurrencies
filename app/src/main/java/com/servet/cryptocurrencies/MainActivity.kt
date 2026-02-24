@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.servet.cryptocurrencies.core.domain.util.toString
 import com.servet.cryptocurrencies.core.presentation.util.ObserveAsEvents
+import com.servet.cryptocurrencies.crypto.presentation.currency_detail.CurrencyDetailScreen
 import com.servet.cryptocurrencies.crypto.presentation.currency_list.CurrencyListEvent
 import com.servet.cryptocurrencies.crypto.presentation.currency_list.CurrencyListScreen
 import com.servet.cryptocurrencies.crypto.presentation.currency_list.CurrencyListViewModel
@@ -41,11 +42,21 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-
-                    CurrencyListScreen(
-                        state = state,
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    when {
+                        state.selectedCurrency != null -> {
+                            CurrencyDetailScreen(
+                                state = state,
+                                modifier = Modifier.padding(innerPadding)
+                            )
+                        }
+                        else -> {
+                            CurrencyListScreen(
+                                state = state,
+                                modifier = Modifier.padding(innerPadding),
+                                onAction = viewModel::onAction
+                            )
+                        }
+                    }
                 }
             }
         }

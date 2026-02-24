@@ -4,3 +4,5 @@ import java.math.BigDecimal
 
 fun String.toBigDecimalSafe(default: BigDecimal = BigDecimal.ZERO): BigDecimal =
     runCatching { this.toBigDecimal() }.getOrElse { default }
+
+fun Double.toBigDecimal(): BigDecimal = BigDecimal.valueOf(this)

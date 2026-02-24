@@ -22,6 +22,7 @@ import com.servet.cryptocurrencies.ui.theme.CryptocurrenciesTheme
 @Composable
 fun CurrencyListScreen(
     state: CurrencyListState,
+    onAction: (CurrencyListAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (state.isLoading) {
@@ -39,7 +40,9 @@ fun CurrencyListScreen(
             items(state.currencies) { currency ->
                 CurrencyListItem(
                     currencyUI = currency,
-                    onClick = { /*TODO:*/  },
+                    onClick = {
+                        onAction(CurrencyListAction.OnCurrencyClick(currency))
+                    },
                     modifier = Modifier.fillMaxWidth()
                 )
                 HorizontalDivider()
@@ -57,7 +60,8 @@ private fun CurrencyListScreenPreview() {
             state = CurrencyListState(
                 currencies = (1..10).map { mockCurrency.copy(id = it.toString()) }
             ),
-            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
+            onAction = {}
         )
     }
 }
