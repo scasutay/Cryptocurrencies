@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.servet.cryptocurrencies.core.domain.util.onError
 import com.servet.cryptocurrencies.core.domain.util.onSuccess
 import com.servet.cryptocurrencies.crypto.domain.CryptoDataSource
+import com.servet.cryptocurrencies.crypto.presentation.models.CurrencyUI
 import com.servet.cryptocurrencies.crypto.presentation.models.toCurrencyUI
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
 
 class CurrencyListViewModel(
     private val cryptoDataSource: CryptoDataSource
@@ -34,12 +36,26 @@ class CurrencyListViewModel(
     fun onAction(action: CurrencyListAction) {
         when (action) {
             is CurrencyListAction.OnCurrencyClick -> {
-                _state.update {
-                    it.copy(
-                        selectedCurrency = action.currencyUI
-                    )
-                }
+                selectCurrency(action.currencyUI)
             }
+        }
+    }
+
+    private fun selectCurrency(currencyUI: CurrencyUI) {
+        _state.update { it.copy(selectedCurrency = currencyUI) }
+
+        viewModelScope.launch {
+            cryptoDataSource.getCurrencyHistory(
+                currencyId = currencyUI.id,
+                start = ZonedDateTime.now().minusDays(5),
+                end = ZonedDateTime.now()
+            )
+                .onSuccess { history ->
+                    // TODO: line-chart
+                }
+                .onError { error ->
+                    _events.send(CurrencyListEvent.Error(error))
+                }
         }
     }
 
