@@ -1,6 +1,5 @@
 package com.servet.cryptocurrencies.crypto.presentation.currency_detail
 
-import android.icu.text.IDNA.Info
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
