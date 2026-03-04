@@ -3,6 +3,7 @@ package com.servet.cryptocurrencies.crypto.presentation.models
 import androidx.annotation.DrawableRes
 import com.servet.cryptocurrencies.crypto.domain.Currency
 import com.servet.cryptocurrencies.core.presentation.util.getDrawableForCurrencyCode
+import com.servet.cryptocurrencies.crypto.presentation.currency_detail.DataPoint
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
@@ -15,7 +16,8 @@ data class CurrencyUI(
     val marketCapUsd: FormattedAmount,
     val priceUsd: FormattedAmount,
     val changePercent24Hr: FormattedNumber,
-    @DrawableRes val iconResource: Int
+    @DrawableRes val iconResource: Int,
+    val currencyPriceHistory: List<DataPoint> = emptyList()
 )
 
 data class FormattedAmount(

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.servet.cryptocurrencies.core.domain.util.onError
 import com.servet.cryptocurrencies.core.domain.util.onSuccess
 import com.servet.cryptocurrencies.crypto.domain.CryptoDataSource
+import com.servet.cryptocurrencies.crypto.presentation.currency_detail.DataPoint
 import com.servet.cryptocurrencies.crypto.presentation.models.CurrencyUI
 import com.servet.cryptocurrencies.crypto.presentation.models.toCurrencyUI
 import kotlinx.coroutines.channels.Channel
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class CurrencyListViewModel(
     private val cryptoDataSource: CryptoDataSource
@@ -51,7 +53,24 @@ class CurrencyListViewModel(
                 end = ZonedDateTime.now()
             )
                 .onSuccess { history ->
-                    // TODO: line-chart
+                    val dataPoints = history
+                        .sortedBy { it.dateTime }
+                        .map {
+                            DataPoint(
+                                x = it.dateTime.hour.toFloat(),
+                                y = it.priceUsd.toFloat(),
+                                xLabel = DateTimeFormatter
+                                    .ofPattern("ha\nM/d")
+                                    .format(it.dateTime)
+                            )
+                        }
+                    _state.update {
+                        it.copy(
+                            selectedCurrency = it.selectedCurrency?.copy(
+                                currencyPriceHistory = dataPoints
+                            )
+                        )
+                    }
                 }
                 .onError { error ->
                     _events.send(CurrencyListEvent.Error(error))
