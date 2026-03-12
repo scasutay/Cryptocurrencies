@@ -183,7 +183,6 @@ Benefits:
 
 Future improvements that could be added:
 
-- Unit tests
 - Use-case layer
 - Local caching
 - Multi-module architecture
@@ -205,8 +204,4 @@ It focuses on:
 - clean separation of layers
 - maintainable project structure
 
----
 
-## Author
-
-**Servet Can Asutay**
